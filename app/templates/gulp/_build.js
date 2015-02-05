@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var merge = require('merge-stream');
 
 var paths = gulp.paths;
 
@@ -15,7 +16,7 @@ gulp.task('partials', ['markups'], function () {
 <% } %>
   return gulp.src([
     paths.src + '/{app,components}/**/*.html',
-    paths.tmp + '/{app,components}/**/*.html'
+    paths.tmp + '/serve/{app,components}/**/*.html'
   ])
     .pipe($.minifyHtml({
       empty: true,
@@ -82,10 +83,15 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src($.mainBowerFiles())
+  var customFonts = gulp.src(paths.src + '/assets/fonts/**/*')
+    .pipe(gulp.dest(paths.dist + '/assets/fonts/'));
+
+  var bowerFonts = gulp.src($.mainBowerFiles())
     .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.flatten())
     .pipe(gulp.dest(paths.dist + '/fonts/'));
+
+  return merge(customFonts, bowerFonts);
 });
 
 gulp.task('misc', function () {

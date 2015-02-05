@@ -45,7 +45,7 @@
           "module": "ngSanitize"
         },
         "name": "angular-sanitize.js (to securely parse and manipulate HTML)",
-        "checked": false
+        "checked": true
       }
     ]
   },
